@@ -10,23 +10,45 @@ import { Setting } from "./pages/Setting";
 import { AddLeads } from "./pages/AddLead";
 import { Footer } from "./component/footer/Footer";
 import { Login } from "./pages/Login";
+import { ProtectingRoute } from "./component/private/ProtectRoute";
 
 function App() {
   return (
-    <div className='App'>
+    <div className=''>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout/>}>
+          <Route path='/' element={<Layout />}>
             <Route index element={<Dashboard />} />
-            <Route path='/leads' element={<Leads />} />
-            <Route path='/add' element={<AddLeads />} />
+            <Route
+              path='/leads'
+              element={
+                <ProtectingRoute>
+                  <Leads />
+                </ProtectingRoute>
+              }
+            />
+            <Route
+              path='/add'
+              element={
+                <ProtectingRoute>
+                  <AddLeads />
+                </ProtectingRoute>
+              }
+            />
             <Route path='/agents' element={<Agents />} />
-            <Route path='/reports' element={<Report />} />
+            <Route
+              path='/reports'
+              element={
+                <ProtectingRoute>
+                  <Report />
+                </ProtectingRoute>
+              }
+            />
             <Route path='/setting' element={<Setting />} />
-            <Route path='/login' element={<Login/>} />
+            <Route path='/login' element={<Login />} />
           </Route>
         </Routes>
-        <Footer/>
+        <Footer />
       </BrowserRouter>
     </div>
   );

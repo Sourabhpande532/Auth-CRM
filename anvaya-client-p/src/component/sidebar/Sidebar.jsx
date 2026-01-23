@@ -1,6 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Sidebar = () => {
+  const { isAuthenticated, logout } = useAuth();
   return (
     <div className='border-right' style={{ width: "200px" }}>
       <ul className='nav'>
@@ -34,16 +36,19 @@ const Sidebar = () => {
             Setting
           </Link>
         </li>
-        <li className='nav-item'>
-          <Link to='/login' className='nav-link'>
-            Login--
-          </Link>
-        </li>
-        <li className='nav-item'>
-          <Link to='/login' className='nav-link'>
-            Logout--
-          </Link>
-        </li>
+        {isAuthenticated ? (
+          <li className='nav-item'>
+            <Link onClick={logout} to='/login' className='nav-link'>
+              Logout--
+            </Link>
+          </li>
+        ) : (
+          <li className='nav-item'>
+            <Link to='/login' className='nav-link'>
+              Login--
+            </Link>
+          </li>
+        )}
       </ul>
     </div>
   );

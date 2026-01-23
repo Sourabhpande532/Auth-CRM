@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = "your_jwt_key";
+const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_key";
 
 exports.LoginAdmin = async (req, res) => {
   try {
@@ -28,6 +28,7 @@ exports.varifyJWT = (req, res, next) => {
     next();
   } catch (error) {
     console.error("error occuring varifyjwt:", error.message);
+    return res.status(401).json({ message: "Invalid token" });
   }
 };
 
