@@ -1,7 +1,40 @@
+import { Link, NavLink } from "react-router-dom";
+
 const Sidebar = () => {
   return (
-    <div>
-      <h2>Sidebar Page</h2>
+    <div className='border-right' style={{ width: "200px" }}>
+      <ul className='nav'>
+        <li className='nav-item'>
+          <NavLink to='/' className='nav-link'>
+            Dashboard
+          </NavLink>
+        </li>
+        <li className='nav-item'>
+          <NavLink to='/leads' className='nav-link'>
+            Leads
+          </NavLink>
+        </li>
+        <li className='nav-item'>
+          <Link to='/add' className='nav-link'>
+            Add Lead
+          </Link>
+        </li>
+        <li className='nav-item'>
+          <Link to='/agents' className='nav-link'>
+            Agents
+          </Link>
+        </li>
+        <li className='nav-item'>
+          <Link to='/reports' className='nav-link'>
+            Reports
+          </Link>
+        </li>
+        <li className='nav-item'>
+          <Link to='/setting' className='nav-link'>
+            Setting
+          </Link>
+        </li>
+      </ul>
     </div>
   );
 };

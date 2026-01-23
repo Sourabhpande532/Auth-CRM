@@ -1,7 +1,12 @@
+import { Sidebar } from "../sidebar/Sidebar";
+import { Outlet } from "react-router-dom";
 const Layout = () => {
   return (
     <div>
-      <h2>Layout Page</h2>
+      <div className='d-flex gap-2'>
+        <Sidebar />
+        <Outlet />
+      </div>
     </div>
   );
 };
