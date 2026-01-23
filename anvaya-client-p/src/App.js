@@ -9,6 +9,7 @@ import { Report } from "./pages/Reports";
 import { Setting } from "./pages/Setting";
 import { AddLeads } from "./pages/AddLead";
 import { Footer } from "./component/footer/Footer";
+import { Login } from "./pages/Login";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path='/agents' element={<Agents />} />
             <Route path='/reports' element={<Report />} />
             <Route path='/setting' element={<Setting />} />
+            <Route path='/login' element={<Login/>} />
           </Route>
         </Routes>
         <Footer/>
