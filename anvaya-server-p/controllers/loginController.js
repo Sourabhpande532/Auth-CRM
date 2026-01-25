@@ -7,9 +7,13 @@ exports.LoginAdmin = async (req, res) => {
     if (email !== "admin@gmail.com" || password !== "1234") {
       return res.status(401).json({ message: "Invalid Credential" });
     }
-    const token = jwt.sign({ role: "admin", email }, JWT_SECRET, {
-      expiresIn: "24h",
-    });
+    const token = jwt.sign(
+      { userId: "1011", role: "admin", email },
+      JWT_SECRET,
+      {
+        expiresIn: "24h",
+      },
+    );
     res.status(200).json({ success: true, token });
   } catch (error) {
     console.error("Error occuring login credentials:", error.message);
