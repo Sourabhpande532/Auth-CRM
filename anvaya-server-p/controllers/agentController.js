@@ -51,3 +51,23 @@ exports.createAgents = async (req, res) => {
     });
   }
 };
+
+exports.editAgents = async (req, res) => {
+  try {
+    const agents = await Agents.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.status(200).json({
+      success: true,
+      message: "Agent update successfully",
+      data: { agents },
+    });
+  } catch (error) {
+    console.error(error.message, "edit agents");
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error edit agent.",
+      error: error.message,
+    });
+  }
+};
