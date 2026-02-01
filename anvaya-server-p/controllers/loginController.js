@@ -37,10 +37,13 @@ exports.varifyJWT = (req, res, next) => {
 };
 
 exports.ProtectedAdmin = async (req, res) => {
+  console.log(req.cookies);
+  
   try {
     res.json({
       message: "Protected Data",
       user: req.user,
+      cookie: req.cookies
     });
   } catch (error) {
     console.error("Error occuring giving access:", error.message);
