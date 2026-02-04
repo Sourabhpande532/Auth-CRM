@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_key";
+// require("dotenv").config();
+const JWT_SECRET = process.env.JWT_SECRET;
 
 exports.LoginAdmin = async (req, res) => {
   try {
@@ -38,12 +39,12 @@ exports.varifyJWT = (req, res, next) => {
 
 exports.ProtectedAdmin = async (req, res) => {
   console.log(req.cookies);
-  
+
   try {
     res.json({
       message: "Protected Data",
       user: req.user,
-      cookie: req.cookies
+      cookie: req.cookies,
     });
   } catch (error) {
     console.error("Error occuring giving access:", error.message);

@@ -20,12 +20,80 @@ exports.obtainedLeads = async (req, res, next) => {
       filter.salesAgent = salesAgent;
     }
     /* --- status validation --- */
-    if(status){
-        
+    if (status) {
+      const validStatus = [
+        "New",
+        "Contacted",
+        "Qualified",
+        "Proposal Sent",
+        "Closed",
+      ];
+      if (!validStatus.includes(status)) {
+        return next(
+          createErrors({
+            status: 400,
+            message:
+              "Invalid input: 'Status' must be one of ['New','Contacted', 'Qualified', 'Proposal Sent', 'Closed']",
+          }),
+        );
+      }
+      filter.status = status;
     }
-    const lead = await Lead.find(filter).populate("salesAgent");
-    res.status(200).json({ success: true, data: { lead } });
+    if (source) {
+      const validSource = [
+        "Website",
+        "Referral",
+        "Cold Call",
+        "Advertisement",
+        "Email",
+        "Other",
+      ];
+      if (!validSource.includes(source)) {
+        return next(
+          createErrors({
+            status: 400,
+            message:
+              "Invalid Input: 'source' must be one of ['Website', 'Referral', 'Cold Call', 'Advertisement', 'Email','Other'] ",
+          }),
+        );
+      }
+      filter.source = source;
+    }
+
+    if (tags) {
+      filter.tags = { $all: Array.isArray(tags) ? tags : tags.split(",") };
+    }
+
+    let query = await Lead.find(filter).populate({
+      path: "salesAgent",
+      select: "name email",
+    });
+    /* ---- sorting ---- */
+    if (sortBy) {
+      const allowedSortFields = [
+        "createdAt",
+        "updatedAt",
+        "priority",
+        "status",
+      ];
+      if (!allowedSortFields.includes(sortBy)) {
+        return next(
+          createErrors({
+            status: 400,
+            message: `Invalid input: 'sortBy' must be one of ${allowedSortFields.join(", ")} `,
+          }),
+        );
+      }
+      query = query.sort({
+        [sortBy]: sortDir === "desc" ? -1 : 1,
+      });
+    }
+    console.log("query:", query);
+    // const leads = await query.exec();
+    res.status(200).json({ success: true, data: { query } });
   } catch (error) {
+    console.error(error.message);
+
     return next(error);
   }
 };
@@ -70,3 +138,6 @@ exports.CreateLead = async (req, res, next) => {
     return next(error);
   }
 };
+
+/* ?tags=Follow-up return array && 1st conditio true o.w ?tags=Follow-up,High value 2nd condtion true. 
+$all checks that a field contains all the specified values in an order. inside an array. */
