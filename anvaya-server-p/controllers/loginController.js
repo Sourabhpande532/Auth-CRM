@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-// require("dotenv").config();
+require("dotenv").config();
 const JWT_SECRET = process.env.JWT_SECRET;
 
 exports.LoginAdmin = async (req, res) => {
