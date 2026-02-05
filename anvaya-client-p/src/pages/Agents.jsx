@@ -1,6 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { useAgent } from "../contexts/AgentsContext";
-import { useFetch } from "../userFetch";
 import { url } from "../api";
 import { useAuth } from "../contexts/AuthContext";
 
