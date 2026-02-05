@@ -59,15 +59,16 @@ exports.obtainedLeads = async (req, res, next) => {
       }
       filter.source = source;
     }
-
+    /* ----- Tags Filter ----- */
     if (tags) {
       filter.tags = { $all: Array.isArray(tags) ? tags : tags.split(",") };
     }
 
-    let query = await Lead.find(filter).populate({
+    let query = Lead.find(filter).populate({
       path: "salesAgent",
       select: "name email",
     });
+
     /* ---- sorting ---- */
     if (sortBy) {
       const allowedSortFields = [
@@ -88,12 +89,12 @@ exports.obtainedLeads = async (req, res, next) => {
         [sortBy]: sortDir === "desc" ? -1 : 1,
       });
     }
-    console.log("query:", query);
-    // const leads = await query.exec();
-    res.status(200).json({ success: true, data: { query } });
+    const leads = await query.exec();
+    res
+      .status(200)
+      .json({ success: true, count: leads.length, data: { leads } });
   } catch (error) {
     console.error(error.message);
-
     return next(error);
   }
 };
