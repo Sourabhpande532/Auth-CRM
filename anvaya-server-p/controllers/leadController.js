@@ -102,35 +102,101 @@ exports.obtainedLeads = async (req, res, next) => {
 exports.CreateLead = async (req, res, next) => {
   try {
     const payload = req.body;
-    const { name, salesAgent } = payload;
-    if (!name || !salesAgent) {
+    const { name, source, salesAgent, status, timeToClose, priority } = payload;
+    if (!name || typeof name !== "string") {
       return next(
         createErrors({
-          message: "Invalid input: name or salesAgent is required.",
+          message: "Invalid input: 'name' is required and must be a string.",
           status: 400,
         }),
       );
     }
-    // Validation ObjectId
-    if (!mongoose.Types.ObjectId.isValid(salesAgent)) {
+    /* --- source validation --- */
+    const validSource = [
+      "Website",
+      "Referral",
+      "Cold Call",
+      "Advertisement",
+      "Email",
+      "Other",
+    ];
+    if (!source || !validSource.includes(source)) {
       return next(
         createErrors({
           status: 400,
-          message: `Invalid salesAgent ID formate`,
+          message:
+            "Invalid input: 'source' must be one of Website, Referral, Cold Call, Advertisement, Email, Other.",
         }),
       );
+    }
+
+    // Validation ObjectId
+    if (salesAgent) {
+      if (!mongoose.Types.ObjectId.isValid(salesAgent)) {
+        return next(
+          createErrors({
+            status: 400,
+            message: `Invalid salesAgent ID formate`,
+          }),
+        );
+      }
     }
 
     // Check if sales agent exists
     const agentExists = await SalesAgents.findById(salesAgent);
-
-    if (!agentExists.salesAgent) {
+    if (!agentExists) {
       return next(
         createErrors({
           status: 404,
           message: `Sales agent with ID '${salesAgent}' not found `,
         }),
       );
+    }
+
+    // Status validation
+    if (status) {
+      const validStatus = [
+        "New",
+        "Contacted",
+        "Qualified",
+        "Proposal Sent",
+        "Closed",
+      ];
+      if (!status || !validStatus.includes(status)) {
+        return next(
+          createErrors({
+            status: 400,
+            message:
+              "Invalid input: 'status' must be one of New, Contacted, Qualified, Proposal Sent, Closed.",
+          }),
+        );
+      }
+    }
+
+    // timeToClose validation
+    if (timeToClose !== undefined) {
+      if (!Number.isInteger(timeToClose) || timeToClose <= 0) {
+        return next(
+          createErrors({
+            status: 400,
+            message: "Invalid input: 'timeToClose' must be a positive integer.",
+          }),
+        );
+      }
+    }
+
+    // priority validation
+    if (priority) {
+      const validPriority = ["High", "Medium", "Low"];
+      if (!validPriority.includes(priority)) {
+        return next(
+          createErrors({
+            status: 400,
+            message:
+              "Invalid input: 'priority' must be one of High, Medium, Low.",
+          }),
+        );
+      }
     }
     const newLead = await new Lead(payload).save();
     await newLead.populate({ path: "salesAgent", select: "name email" });
