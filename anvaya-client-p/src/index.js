@@ -10,13 +10,13 @@ import { LeadProvider } from "./contexts/LeadContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <LeadProvider>
-      <AuthProvider>
+    <AuthProvider>
+      <LeadProvider>
         <AgentProvider>
           <App />
         </AgentProvider>
-      </AuthProvider>
-    </LeadProvider>
+      </LeadProvider>
+    </AuthProvider>
   </React.StrictMode>,
 );
 
