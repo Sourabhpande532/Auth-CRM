@@ -4,7 +4,7 @@ import { useFetch } from "../userFetch";
 const Dashboard = () => {
   const { data, error } = useFetch(`${url}/admin/main`);
   const { leads } = useLead();
-  const modifyLeads = leads.slice(0, 7);
+  const modifyLeads = leads.slice(5);
   const updateLeads = modifyLeads.map((l) => ({
     ...l,
     label: l.status === "New" ? "25% Off" : "No Offer",

@@ -27,11 +27,32 @@ const LeadProvider = ({ children }) => {
       console.error(error.message);
     }
   };
+  const addLeads = async (newLead) => {
+    try {
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      if (token) {
+        headers.authorization = `Bearer ${token}`;
+      }
+      const newData = await fetch(`${url}/leads`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(newLead),
+      });
+      await fetchLeads();
+      return newData;
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
   useEffect(() => {
     fetchLeads();
   }, []);
   return (
-    <LeadContext.Provider value={{ leads }}>{children}</LeadContext.Provider>
+    <LeadContext.Provider value={{ leads, addLeads }}>
+      {children}
+    </LeadContext.Provider>
   );
 };
 const useLead = () => useContext(LeadContext);
