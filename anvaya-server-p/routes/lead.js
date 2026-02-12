@@ -1,8 +1,9 @@
 const express = require("express");
 const app = express.Router();
-const leadCtrl = require("../controllers/leadController");
+const { obtainedLeads, CreateLead } = require("../controllers/leadController");
+const { varifyJWT } = require("../controllers/loginController");
 
-app.get("/", leadCtrl.obtainedLeads);
-app.post("/", leadCtrl.CreateLead);
+app.get("/", varifyJWT, obtainedLeads);
+app.post("/", varifyJWT, CreateLead);
 
 module.exports = app;

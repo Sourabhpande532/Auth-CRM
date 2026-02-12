@@ -4,7 +4,6 @@ import { useAgent } from "../contexts/AgentsContext";
 import { url } from "../api";
 import { useAuth } from "../contexts/AuthContext";
 
-
 const Agents = () => {
   const { addAgents, updateAgent } = useAgent();
   const [agents, setAgents] = useState([]);
@@ -33,8 +32,8 @@ const Agents = () => {
     e.preventDefault();
     try {
       if (editId) {
-        await updateAgent(editId,form);
-        loadAgents()
+        await updateAgent(editId, form);
+        loadAgents();
       } else {
         await addAgents(form);
         loadAgents();

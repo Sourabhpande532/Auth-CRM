@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { createContext } from "react";
 import { url } from "../api";
@@ -50,6 +50,30 @@ const AgentProvider = ({ children }) => {
     }
   };
 
+  const loadAgents = async () => {
+    try {
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+      const response = await fetch(`${url}/agents`, {
+        method: "GET",
+        headers,
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Invalid agent error");
+      }
+      setAgents(data.data.agents);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+  useEffect(() => {
+    loadAgents();
+  }, []);
   return (
     <AgentContext.Provider
       value={{ agents, setAgents, addAgents, updateAgent }}>
