@@ -11,11 +11,19 @@ import { AddLeads } from "./pages/AddLead";
 import { Footer } from "./component/footer/Footer";
 import { Login } from "./pages/Login";
 import { ProtectingRoute } from "./component/private/ProtectRoute";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <div className=''>
       <BrowserRouter>
+        <Toaster
+          position='top-center'
+          toastOptions={{
+            style: { fontSize: "100px" },
+          }}
+          reverseOrder={false}
+        />
         <Routes>
           <Route path='/' element={<Layout />}>
             <Route index element={<Dashboard />} />
