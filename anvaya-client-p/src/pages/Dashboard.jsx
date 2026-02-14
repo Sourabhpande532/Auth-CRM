@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { url } from "../api";
 import { useLead } from "../contexts/LeadContext";
 import { useFetch } from "../userFetch";
@@ -23,7 +24,9 @@ const Dashboard = () => {
         {updateLeads.map((l) => (
           <div key={l._id} className='col-md-4'>
             <div className='card border-0 shadow-lg p-2'>
-              <header className='card-header'>{l.name}</header>
+              <header className='card-header'>
+                <Link to={`/ldetails/${l._id}`}>{l.name}</Link>
+              </header>
               <div className='card-body'>
                 <p>Source: {l.source}</p>
                 <p>Status: {l.status}</p>

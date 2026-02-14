@@ -12,6 +12,7 @@ import { Footer } from "./component/footer/Footer";
 import { Login } from "./pages/Login";
 import { ProtectingRoute } from "./component/private/ProtectRoute";
 import { Toaster } from "react-hot-toast";
+import { LeadDetails } from "./component/leadManagement/LeadDetail";
 
 function App() {
   return (
@@ -32,6 +33,14 @@ function App() {
               element={
                 <ProtectingRoute>
                   <Leads />
+                </ProtectingRoute>
+              }
+            />
+            <Route
+              path='/ldetails/:id'
+              element={
+                <ProtectingRoute>
+                  <LeadDetails />
                 </ProtectingRoute>
               }
             />
