@@ -21,7 +21,7 @@ function App() {
         <Toaster
           position='top-center'
           toastOptions={{
-            style: { fontSize: "100px" },
+            style: { fontSize: "25px" },
           }}
           reverseOrder={false}
         />
