@@ -11,11 +11,20 @@ import { AddLeads } from "./pages/AddLead";
 import { Footer } from "./component/footer/Footer";
 import { Login } from "./pages/Login";
 import { ProtectingRoute } from "./component/private/ProtectRoute";
+import { Toaster } from "react-hot-toast";
+import { LeadDetails } from "./component/leadManagement/LeadDetail";
 
 function App() {
   return (
     <div className=''>
       <BrowserRouter>
+        <Toaster
+          position='top-center'
+          toastOptions={{
+            style: { fontSize: "25px" },
+          }}
+          reverseOrder={false}
+        />
         <Routes>
           <Route path='/' element={<Layout />}>
             <Route index element={<Dashboard />} />
@@ -24,6 +33,14 @@ function App() {
               element={
                 <ProtectingRoute>
                   <Leads />
+                </ProtectingRoute>
+              }
+            />
+            <Route
+              path='/ldetails/:id'
+              element={
+                <ProtectingRoute>
+                  <LeadDetails />
                 </ProtectingRoute>
               }
             />

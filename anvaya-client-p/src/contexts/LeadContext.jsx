@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { url } from "../api";
 import { useAuth } from "./AuthContext";
+import toast from "react-hot-toast";
 
 const LeadContext = createContext();
 
@@ -41,6 +42,7 @@ const LeadProvider = ({ children }) => {
         body: JSON.stringify(newLead),
       });
       await fetchLeads();
+      toast.success('Lead added successfully')
       return newData;
     } catch (error) {
       console.error(error.message);

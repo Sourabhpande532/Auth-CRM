@@ -206,5 +206,29 @@ exports.CreateLead = async (req, res, next) => {
   }
 };
 
+exports.getLeadDetailsById = async (req, res, next) => {
+  const { leadId } = req.params;
+  if (leadId) {
+    if (!mongoose.Types.ObjectId.isValid(leadId)) {
+      return next(
+        createErrors({
+          status: 404,
+          message: `Lead with ID '${leadId}' not found. `,
+        }),
+      );
+    }
+  }
+  try {
+    const leads = await Lead.findById(leadId).populate(
+      "salesAgent",
+      "name email",
+    );
+    res.status(200).json({ success: true, data: { leads } });
+  } catch (error) {
+    console.error(error.message);
+    return next(error);
+  }
+};
+
 /* ?tags=Follow-up return array && 1st conditio true o.w ?tags=Follow-up,High value 2nd condtion true. 
 $all checks that a field contains all the specified values in an order. inside an array. */
