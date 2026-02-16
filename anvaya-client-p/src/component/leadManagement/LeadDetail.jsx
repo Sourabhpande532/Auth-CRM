@@ -14,14 +14,12 @@ const LeadDetails = () => {
   const [author, setAuthor] = useState("");
   const [text, setText] = useState("");
 
-  const [editing, setEditing] = useState(null);
+  // Edit lead id form 
+  const [showEdit,setShowEdit] = useState(false)
 
-  console.log(lead);
-  console.log(comment);
-  console.log(agent);
-  console.log(author);
-  console.log(text);
-  console.log(editing);
+  // Comment edit 
+  const [editing, setEditing] = useState(null);
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
     if (id && token) {
