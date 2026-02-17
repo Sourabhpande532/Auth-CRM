@@ -29,6 +29,7 @@ exports.getComments = async (req, res, next) => {
 exports.addCommentToLead = async (req, res, next) => {
   const { author, commentText } = req.body;
   const leadId = req.params.id;
+  const userId = req.user.id;
   if (!commentText || typeof commentText !== "string") {
     return next(
       createErrors({

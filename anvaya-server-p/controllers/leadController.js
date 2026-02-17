@@ -230,5 +230,106 @@ exports.getLeadDetailsById = async (req, res, next) => {
   }
 };
 
+exports.updateLeadById = async (req, res, next) => {
+  try {
+    const { leadId } = req.params;
+    const { status, salesAgent, priority, source, timeToClose, tags } =
+      req.body;
+    if (!mongoose.Types.ObjectId.isValid(leadId)) {
+      return next(
+        createErrors({
+          status: 404,
+          message: `Lead with ID '${leadId}' not found.`,
+        }),
+      );
+    }
+    const lead = await Lead.findById(leadId);
+    if (!lead) {
+      return next(
+        createErrors({
+          status: 404,
+          message: `Lead with ID '${leadId}' not found.`,
+        }),
+      );
+    }
+    /* ---- VALIDATIONS ---- */
+
+    const validStatus = [
+      "New",
+      "Contacted",
+      "Qualified",
+      "Proposal Sent",
+      "Closed",
+    ];
+
+    const validPriority = ["High", "Medium", "Low"];
+
+    const validSource = [
+      "Website",
+      "Referral",
+      "Cold Call",
+      "Advertisement",
+      "Email",
+      "Other",
+    ];
+
+    if (status && !validStatus.includes(status)) {
+      return next(
+        createErrors({
+          status: 400,
+          message: "Invalid status value.",
+        }),
+      );
+    }
+
+    if (priority && !validPriority.includes(priority)) {
+      return next(
+        createErrors({
+          status: 400,
+          message: "Invalid priority value.",
+        }),
+      );
+    }
+
+    if (source && !validSource.includes(source)) {
+      return next(
+        createErrors({
+          status: 400,
+          message: "Invalid source value.",
+        }),
+      );
+    }
+    if (timeToClose !== undefined) {
+      if (!Number.isInteger(timeToClose) || timeToClose <= 0) {
+        return next(
+          createErrors({
+            status: 400,
+            message: "timeToClose must be positive integer.",
+          }),
+        );
+      }
+    }
+    if (salesAgent) {
+      if (!mongoose.Types.ObjectId.isValid(salesAgent)) {
+        return next(
+          createErrors({
+            status: 400,
+            message: "Invalid salesAgent ID.",
+          }),
+        );
+      }
+    }
+    const updateLead = await Lead.findByIdAndUpdate(leadId, req.body, {
+      new: true,
+    }).populate("salesAgent", "name email");
+    res.status(200).json({
+      success: true,
+      data: updateLead,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 /* ?tags=Follow-up return array && 1st conditio true o.w ?tags=Follow-up,High value 2nd condtion true. 
 $all checks that a field contains all the specified values in an order. inside an array. */

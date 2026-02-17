@@ -4,11 +4,13 @@ const {
   obtainedLeads,
   CreateLead,
   getLeadDetailsById,
+  updateLeadById,
 } = require("../controllers/leadController");
 const { varifyJWT } = require("../controllers/loginController");
 
 app.get("/", varifyJWT, obtainedLeads);
 app.post("/", varifyJWT, CreateLead);
-app.get("/:leadId",varifyJWT, getLeadDetailsById);
+app.put("/:leadId", varifyJWT, updateLeadById);
+app.get("/:leadId", varifyJWT, getLeadDetailsById);
 
 module.exports = app;
