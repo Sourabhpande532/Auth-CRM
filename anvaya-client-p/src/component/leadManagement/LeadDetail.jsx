@@ -13,13 +13,17 @@ const LeadDetails = () => {
   const [agent, setAgent] = useState([]);
   const [author, setAuthor] = useState("");
   const [text, setText] = useState("");
+  console.log(lead);
 
-  // Edit lead id form 
-  const [showEdit,setShowEdit] = useState(false)
-
-  // Comment edit 
-  const [editing, setEditing] = useState(null);
+  // Edit lead id form
+  const [showEdit, setShowEdit] = useState(false);
   const [formData, setFormData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  console.log(formData);
+
+  // Comment edit
+  const [editing, setEditing] = useState(null);
 
   useEffect(() => {
     if (id && token) {
@@ -77,6 +81,7 @@ const LeadDetails = () => {
       toast.error("Failed to add comment");
     }
   };
+  // comment edit
   const saveEdit = async () => {
     try {
       await fetchJSON(
@@ -94,6 +99,42 @@ const LeadDetails = () => {
       toast.error("Failed to edit text");
     }
   };
+
+  // EDIT LEAD
+  const openEditModal = () => {
+    setFormData(lead);
+    setShowEdit(true);
+  };
+  //
+  const handleUpdate = async () => {
+    try {
+      // OPTIONAL PAYLOAD Either send this or directly form 
+      const payload = {
+        status: formData.status,
+        priority: formData.priority,
+        source: formData.source,
+        timeToClose: Number(formData.timeToClose),
+        salesAgent:
+          typeof formData.salesAgent === "object"
+            ? formData.salesAgent._id
+            : formData.salesAgent,
+        tags: formData.tags || [],
+      };
+      await fetchJSON(
+        `/leads/${id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify(payload),
+        },
+        token,
+      );
+      setShowEdit(false);
+      load();
+      toast.success("Comment Updated");
+    } catch (error) {
+      toast.error("Updare failed");
+    }
+  };
   return (
     <div className=''>
       <div className='d-flex justify-content-between align-items-center'>
@@ -108,10 +149,21 @@ const LeadDetails = () => {
           </select>
         </div>
       </div>
-
       <p>Agent: {lead?.salesAgent?.name}</p>
+      <p>
+        <strong>Status:</strong> {lead?.status}
+      </p>
       <p>Source: {lead?.source}</p>
       <p>Priority: {lead?.priority}</p>
+      <p>
+        <strong>Time to Close:</strong> {lead?.timeToClose} Days
+      </p>
+      <p>
+        <strong>Tags:</strong> {lead?.tags?.join(", ")}
+      </p>
+      <button className='btn btn-primary mt-2' onClick={openEditModal}>
+        Edit Lead Details
+      </button>
 
       <hr />
       {/* COMMENTS */}
@@ -151,6 +203,7 @@ const LeadDetails = () => {
           Add Comment
         </button>
       </form>
+      {comment.length === 0 && <p className='text-muted'>No comments ye.</p>}
       <div className='mt-3'>
         {comment.map((comment) => (
           <div key={comment._id} className='border p-2 mb-2'>
@@ -199,6 +252,129 @@ const LeadDetails = () => {
           </div>
         ))}
       </div>
+      {showEdit && (
+        <div className='modal d-block' tabIndex='-1'>
+          <div className='modal-dialog'>
+            <div className='modal-content'>
+              <div className='modal-header'>
+                <h5 className='modal-title'>Edit Lead</h5>
+                <button
+                  className='btn-close'
+                  onClick={() => setShowEdit(false)}
+                />
+              </div>
+
+              <div className='modal-body'>
+                {/* STATUS */}
+                <label>Status</label>
+                <select
+                  className='form-control mb-3'
+                  value={formData.status || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, status: e.target.value })
+                  }>
+                  <option value=''>Select Status</option>
+                  <option>New</option>
+                  <option>Contacted</option>
+                  <option>Qualified</option>
+                  <option>Proposal Sent</option>
+                  <option>Closed</option>
+                </select>
+
+                {/* PRIORITY */}
+                <label>Priority</label>
+                <select
+                  className='form-control mb-3'
+                  value={formData.priority || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, priority: e.target.value })
+                  }>
+                  <option value=''>Select Priority</option>
+                  <option>High</option>
+                  <option>Medium</option>
+                  <option>Low</option>
+                </select>
+
+                {/* SOURCE */}
+                <label>Source</label>
+                <select
+                  className='form-control mb-3'
+                  value={formData.source || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, source: e.target.value })
+                  }>
+                  <option value=''>Select Source</option>
+                  <option>Website</option>
+                  <option>Referral</option>
+                  <option>Cold Call</option>
+                  <option>Advertisement</option>
+                  <option>Email</option>
+                  <option>Other</option>
+                </select>
+
+                {/* TIME TO CLOSE */}
+                <label>Time To Close (Days)</label>
+                <input
+                  type='number'
+                  className='form-control mb-3'
+                  value={formData.timeToClose || ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      timeToClose: parseInt(e.target.value),
+                    })
+                  }
+                />
+
+                {/* SALES AGENT */}
+                <label>Assign Sales Agent</label>
+                <select
+                  className='form-control mb-3'
+                  value={formData.salesAgent?._id || formData.salesAgent || ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      salesAgent: e.target.value,
+                    })
+                  }>
+                  <option value=''>Select Agent</option>
+                  {agent.map((agent) => (
+                    <option key={agent._id} value={agent._id}>
+                      {agent.name} ({agent.email})
+                    </option>
+                  ))}
+                </select>
+
+                {/* TAGS */}
+                <label>Tags (comma separated)</label>
+                <input
+                  type='text'
+                  className='form-control'
+                  value={formData.tags?.join(", ") || ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      tags: e.target.value.split(",").map((t) => t.trim()),
+                    })
+                  }
+                />
+              </div>
+
+              <div className='modal-footer'>
+                <button
+                  className='btn btn-secondary'
+                  onClick={() => setShowEdit(false)}>
+                  Cancel
+                </button>
+
+                <button className='btn btn-success' onClick={handleUpdate}>
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
