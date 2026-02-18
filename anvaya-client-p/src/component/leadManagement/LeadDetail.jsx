@@ -18,8 +18,6 @@ const LeadDetails = () => {
   // Edit lead id form
   const [showEdit, setShowEdit] = useState(false);
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   console.log(formData);
 
   // Comment edit
@@ -108,7 +106,7 @@ const LeadDetails = () => {
   //
   const handleUpdate = async () => {
     try {
-      // OPTIONAL PAYLOAD Either send this or directly form 
+      // OPTIONAL PAYLOAD Either send this or directly form
       const payload = {
         status: formData.status,
         priority: formData.priority,
