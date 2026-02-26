@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { createContext } from "react";
-import { url } from "../api";
+import { fetchJSON, url } from "../api";
 import { useAuth } from "./AuthContext";
 
 const AgentContext = createContext();
@@ -10,6 +10,8 @@ const AgentContext = createContext();
 const AgentProvider = ({ children }) => {
   const { token } = useAuth();
   const [agents, setAgents] = useState([]);
+  const [tags, setTags] = useState([]);
+
   const addAgents = async (payload) => {
     try {
       const headers = {
@@ -72,12 +74,22 @@ const AgentProvider = ({ children }) => {
       console.error(error.message);
     }
   };
+  const loadTags = async () => {
+    try {
+      const tagResponse = await fetchJSON("/tags");
+      setTags(tagResponse?.data?.tags || []);
+    } catch (error) {
+      console.error("Failed to fetch tags", error);
+    }
+  };
   useEffect(() => {
     loadAgents();
+    loadTags();
   }, []);
+
   return (
     <AgentContext.Provider
-      value={{ agents, setAgents, addAgents, updateAgent }}>
+      value={{ agents, setAgents, addAgents, updateAgent,tags }}>
       {children}
     </AgentContext.Provider>
   );
