@@ -37,7 +37,7 @@ function App() {
               }
             />
             <Route
-              path='/ldetails/:id'
+              path='/leads/:id'
               element={
                 <ProtectingRoute>
                   <LeadDetails />
