@@ -20,16 +20,20 @@ const LeadCard = ({ lead }) => {
           {/* delete icon */}
           <p className='badge text-bg-danger p-2 m-2'>delete</p>
         </div>
-        <p className="card-text mt-2 mb-2">
-         Status: <strong>{lead.status}</strong> | Agent:{" "} {lead.salesAgent?.name || "-"}
+        <p className='card-text mt-2 mb-2'>
+          Status: <strong>{lead.status}</strong> | Agent:{" "}
+          {lead.salesAgent?.name || "-"}
         </p>
         <p className='card-text mb-2'>
-        Priority: {lead.priority} | Time to Close {lead.timeToClose} days
+          Priority: {lead.priority} | Time to Close {lead.timeToClose} days |{" "}
+          {lead.source}
         </p>
         <div>
-         {lead.tags?.map((t)=>(
-            <span key={t} className="badge bg-info text-dark me-1">{t}</span>
-         ))}
+          {lead.tags?.map((t) => (
+            <span key={t} className='badge bg-info text-dark me-1'>
+              {t}
+            </span>
+          ))}
         </div>
       </div>
     </div>
