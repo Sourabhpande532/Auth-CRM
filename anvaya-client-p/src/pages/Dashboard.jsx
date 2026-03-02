@@ -25,8 +25,8 @@ const Dashboard = () => {
           <div key={l._id} className='col-md-4'>
             <div className='card border-0 shadow-lg p-2'>
               <header className='card-header'>
-                <Link to={`/ldetails/${l._id}`}>{l.name}</Link>{" "}
-                (<span>{`${l.salesAgent.name}`}</span>)
+                <Link to={`/leads/${l._id}`}>{l.name}</Link> (
+                <span>{`${l.salesAgent.name}`}</span>)
               </header>
               <div className='card-body'>
                 <p>Source: {l.source}</p>

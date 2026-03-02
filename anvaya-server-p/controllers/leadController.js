@@ -7,6 +7,8 @@ exports.obtainedLeads = async (req, res, next) => {
   try {
     const { salesAgent, status, tags, source, sortBy, sortDir } = req.query;
     const filter = {};
+    console.log(req.query);
+
     /* --- salesAgent validation --- */
     if (salesAgent) {
       if (!mongoose.Types.ObjectId.isValid(salesAgent)) {
@@ -85,9 +87,8 @@ exports.obtainedLeads = async (req, res, next) => {
           }),
         );
       }
-      query = query.sort({
-        [sortBy]: sortDir === "desc" ? -1 : 1,
-      });
+      const direction = sortDir === "desc" ? -1 : 1;
+      query = query.sort({ [sortBy]: direction });
     }
     const leads = await query.exec();
     res
