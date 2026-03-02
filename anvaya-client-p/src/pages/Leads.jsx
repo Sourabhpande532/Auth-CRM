@@ -65,9 +65,9 @@ below code why need this region
   // {salesAgent: '6974ad1e3394b5b0d382fa32'}
   console.log("State Filter:", filter);
 
-  // useEffect(() => {
-  //   setFilters(getFiltersFromURL());
-  // }, [location.search]);
+  useEffect(() => {
+    setFilters(getFiltersFromURL());
+  }, [location.search]);
   /* 
 If you enable this:
 Then whenever URL changes → it re-reads URL → updates state.
@@ -214,13 +214,61 @@ User manually edits URL
           </div>
         </div>
       </div>
-      <div>
-        {loading ? (
-          <p>Loading..</p>
-        ) : (
-          leads.map((l) => <LeadCard key={l._id} lead={l} />)
-        )}
-      </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div className='row'>
+          <div className='col-md-8'>
+            {leads.length === 0 ? (
+              <p>No leads found</p>
+            ) : (
+              leads.map((lead) => <LeadCard key={lead._id} lead={lead} />)
+            )}
+          </div>
+
+          {/* Quick Filters or sidebar */}
+          <div className='col-md-4'>
+            <div className='card p-2'>
+              <h6>Quick Filters</h6>
+              <div className='d-flex flex-wrap'>
+                <button
+                  className='btn btn-sm btn-outline-primary me-1 mb-1'
+                  onClick={() => navigate("/leads?status=New")}>
+                  New
+                </button>
+                <button
+                  className='btn btn-sm btn-outline-secondary me-1 mb-1'
+                  onClick={() => navigate("/leads?status=Contacted")}>
+                  Contacted
+                </button>
+                <button
+                  className='btn btn-sm btn-outline-success me-1 mb-1'
+                  onClick={() => navigate("/leads?status=Closed")}>
+                  Closed
+                </button>
+              </div>
+
+              {/* show known tags for quick set */}
+              {tags && tags.length > 0 && (
+                <>
+                  <hr />
+                  <h6 className='mb-2'>Tags</h6>
+                  <div>
+                    {tags.map((t) => (
+                      <button
+                        key={t._id}
+                        className='btn btn-sm btn-outline-info me-1 mb-1'
+                        onClick={() => navigate(`/leads?tags=${t.name}`)}>
+                        {t.name}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
