@@ -1,0 +1,11 @@
+{
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install": "concurrently \"cd anvaya-server-p && npm i \" \"cd anvaya-client-p && npm i\"  ",
+    "start": "concurrently \"cd anvaya-server-p && npm start \" \"cd anvaya-client-p && npm start\"  "
+  },
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

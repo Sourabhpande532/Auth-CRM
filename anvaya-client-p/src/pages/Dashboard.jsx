@@ -14,7 +14,7 @@ const Dashboard = () => {
   if (error) return <p>{error}</p>;
   if (!data) return <p>Loading..</p>;
   // console.log(leads);
-  
+
   return (
     <div>
       <h2>Dashboard Page</h2>
