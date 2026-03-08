@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useContext, useEffect, useState } from "react";
 import { url } from "../api";
 import { useAuth } from "./AuthContext";
