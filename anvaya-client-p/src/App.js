@@ -13,6 +13,7 @@ import { Login } from "./pages/Login";
 import { ProtectingRoute } from "./component/private/ProtectRoute";
 import { Toaster } from "react-hot-toast";
 import { LeadDetails } from "./component/leadManagement/LeadDetail";
+import { Analysis } from "./pages/Analysis";
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
                 </ProtectingRoute>
               }
             />
+            <Route path='/analysis' element={<Analysis />} />
             <Route path='/setting' element={<Setting />} />
             <Route path='/login' element={<Login />} />
           </Route>

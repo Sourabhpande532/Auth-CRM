@@ -3,7 +3,6 @@ import axios from "axios";
 import { Pie, Bar, Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import { url } from "../api";
-import { plugins } from "chart.js/auto";
 
 const Report = () => {
   const [leads, setLeads] = useState([]);
@@ -134,7 +133,7 @@ const Report = () => {
           <div className='card p-3 h-100'>
             <h4>Leads Closed vs Pipeline</h4>
             <div style={{ height: "300px" }}>
-              <Pie data={pipelineChart} options={chartOptions}/>
+              <Pie data={pipelineChart} options={chartOptions} />
             </div>
           </div>
         </div>
@@ -154,7 +153,7 @@ const Report = () => {
         {/* Status Distribution */}
         <div className='card p-3'>
           <h4>Lead status Distribution</h4>
-          <div style={{ height: "400px",textAlign:'center' }}>
+          <div style={{ height: "400px", textAlign: "center" }}>
             <Doughnut data={statusChart} options={chartOptions} />
           </div>
         </div>
@@ -182,4 +181,9 @@ Lead A: Is March 4th
 Lead B: Is February 20th 
  March 1st? FALSE. (It's further in the past, so it's filtered out).
 If you used "less than" (
-), you would accidentally get every lead closed from the beginning of time up until last week, excluding the recent ones you actually want! */
+), you would accidentally get every lead closed from the beginning of time up until last week, excluding the recent ones you actually want! 
+
+
+TO_EXPLORED_ABOUT CHART: https://codesandbox.io/p/sandbox/react-chart-js-xccdr6?file=%2Fsrc%2Fcomponents%2Flearning2%2Fcharts2%2FBarChart.jsx%3A14%2C47
+
+*/

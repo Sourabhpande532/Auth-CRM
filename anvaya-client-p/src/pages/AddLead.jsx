@@ -14,7 +14,6 @@ const AddLeads = () => {
     timeToClose: "",
     priority: "",
   });
-  const [tagInput, setTagInput] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
