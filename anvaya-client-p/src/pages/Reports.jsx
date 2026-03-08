@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Pie, Bar } from "react-chartjs-2";
+import { Pie, Bar, Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import { url } from "../api";
+import { plugins } from "chart.js/auto";
 
 const Report = () => {
   const [leads, setLeads] = useState([]);
@@ -29,12 +30,135 @@ const Report = () => {
       lead.closedAt &&
       new Date(lead.closedAt) >= weekAgo,
   );
-  console.log('Closed last week:', closedLastWeek);
-  
-  weekAgo.setDate();
+  console.log("Closed last week:", closedLastWeek);
+
+  // REPORT 2: PIPELINE LEADS
+  const pipelineLeads = leads.filter((lead) => lead.status !== "Closed");
+  console.log("Total in pipeline:", pipelineLeads.length);
+
+  // REPORT 3: CLOSED BY AGENT
+  const closedByAgent = leads.reduce((acc, lead) => {
+    if (lead.status === "Closed") {
+      acc[lead.salesAgent] = (acc[lead.salesAgent] || 0) + 1;
+    }
+    return acc;
+  }, {});
+  console.log("Closed by agent:", closedByAgent);
+
+  // REPORT 4: STATUS DISTRIBUTION
+
+  const statusDistribution = leads.reduce((acc, lead) => {
+    acc[lead.status] = (acc[lead.status] || 0) + 1;
+    return acc;
+  }, {});
+
+  console.log("Status Distribution:", statusDistribution);
+
+  // CHART DATA
+  const pipelineChart = {
+    labels: ["Closed", "Pipeline"],
+    datasets: [
+      {
+        label: "Totals",
+        data: [closedLastWeek.length, pipelineLeads.length],
+        backgroundColor: [
+          "rgb(255, 99, 132)",
+          "rgb(54, 162, 235)",
+          "rgb(255, 205, 86)",
+        ],
+        hoverOffset: 4,
+      },
+    ],
+  };
+  const agentChart = {
+    labels: Object.keys(closedByAgent),
+    datasets: [
+      {
+        label: "Closed leads by agent",
+        data: Object.values(closedByAgent),
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(255, 159, 64, 0.2)",
+          "rgba(255, 205, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(153, 102, 255, 0.2)",
+          "rgba(201, 203, 207, 0.2)",
+        ],
+        borderColor: [
+          "rgb(255, 99, 132)",
+          "rgb(255, 159, 64)",
+          "rgb(255, 205, 86)",
+          "rgb(75, 192, 192)",
+          "rgb(54, 162, 235)",
+          "rgb(153, 102, 255)",
+          "rgb(201, 203, 207)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const statusChart = {
+    labels: Object.keys(statusDistribution),
+    datasets: [
+      {
+        label: "Stauts",
+        data: Object.values(statusDistribution),
+        backgroundColor: [
+          "rgb(255, 99, 132)",
+          "rgb(54, 162, 235)",
+          "rgb(255, 205, 86)",
+        ],
+        hoverOffset: 4,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false, //allow to set fixed hight in css
+    plugins: {
+      legend: {
+        position: "bottom", //better for mobile
+      },
+    },
+  };
+
   return (
-    <div>
-      <h2>Report Page</h2>
+    <div className='container mt-4'>
+      <h2>CRM REPORT</h2>
+      <div className='row'>
+        <div className='col-md-6 mb-4'>
+          {/* Closed vs Pipeline */}
+          <div className='card p-3 h-100'>
+            <h4>Leads Closed vs Pipeline</h4>
+            <div style={{ height: "300px" }}>
+              <Pie data={pipelineChart} options={chartOptions}/>
+            </div>
+          </div>
+        </div>
+
+        <div className='col-md-6 mb-4'>
+          {/* Closed By Agent */}
+          <div className='card p-3 h-100'>
+            <h4>Closed Leads by sales agent</h4>
+            <div style={{ height: "300px" }}>
+              <Bar data={agentChart} options={chartOptions} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className='col-12 mb-4'>
+        {/* Status Distribution */}
+        <div className='card p-3'>
+          <h4>Lead status Distribution</h4>
+          <div style={{ height: "400px",textAlign:'center' }}>
+            <Doughnut data={statusChart} options={chartOptions} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
