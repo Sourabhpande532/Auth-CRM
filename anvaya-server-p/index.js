@@ -30,6 +30,7 @@ app.use("/api/leads", require("./routes/lead"));
 app.use("/api/leads", require("./routes/comment"));
 app.use("/api/tags", require("./routes/tagRoutes"));
 app.use("/api/report", require("./routes/reportRoutes"));
+app.use("/api/report2", require("./routes/reportRoutes2"));
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {

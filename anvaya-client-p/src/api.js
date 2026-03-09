@@ -1,3 +1,13 @@
+import axios from "axios";
+
+const API = axios.create({
+  baseURL: "http://localhost:4000/api",
+});
+API.interceptors.request.use((req) => {
+  const token = localStorage.getItem("token");
+  if (token) req.headers.Authorization = `Bearer ${token}`;
+  return req;
+});
 export const url =
   "http://localhost:4000/api" || "https://auth-crm-indol.vercel.app/api";
 
@@ -40,3 +50,5 @@ export async function fetchJSON(path, opts = {}, token) {
 //   process.env.NODE_ENV === "production"
 //     (?) "https://auth-crm-indol.vercel.app/api"
 //     : "http://localhost:4000/api";
+
+export const getLastWeekClosed = () => API.get("/report2/last-weeks");
