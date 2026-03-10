@@ -47,93 +47,116 @@ const AddLeads = () => {
     navigate("/", { replace: true });
   };
   return (
-    <div>
+    <div className='container-fluid px-4 '>
       <h2>AddLeads Page</h2>
-      <div>
-        <form onSubmit={submitHandler}>
-          <label className='form-label'>Lead Name</label>
-          <input
-            className='form-control'
-            placeholder='enter lead name'
-            value={form.name}
-            onChange={handleChange}
-            name='name'
-            required
-          />
-          <label className='form-label'>Source</label>
-          <select
-            onChange={handleChange}
-            className='form-select'
-            name='source'
-            value={form.source}>
-            <option value='Website'>Website</option>
-            <option value='Referral'>Referral</option>
-            <option value='Cold Call'>Cold Call</option>
-            <option value='Advertisement'>Advertisement</option>
-            <option value='Email'>Email</option>
-            <option value='Other'>Other</option>
-          </select>
-          <label className='form-label'>Sales Agent</label>
-          <select
-            name='salesAgent'
-            onChange={handleChange}
-            className='form-select'>
-            <option value=''>--Select Agent ---</option>
-            {agents.map(({ _id, name }) => (
-              <option key={_id} value={_id}>
-                {name}
-              </option>
-            ))}
-          </select>
-          <label className='form-label'>Priority</label>
-          <select
-            name='priority'
-            onChange={handleChange}
-            value={form.priority}
-            className='form-select'>
-            <option value=''>--Select Priority--</option>
-            <option value='High'>High</option>
-            <option value='Medium'>Medium</option>
-            <option value='Low'>Low</option>
-          </select>
-          <label className='form-label'>Time to Close (days)</label>
-          <input
-            type='number'
-            min='1'
-            name='timeToClose'
-            className='form-control'
-            value={form.timeToClose}
-            onChange={handleChange}
-          />
-          <label>Lead Status</label>
-          <select
-            name='status'
-            value={form.status}
-            onChange={handleChange}
-            className='form-select'>
-            <option value='New'>New</option>
-            <option value='Contacted'>Contacted</option>
-            <option value='Qualified'>Qualified</option>
-            <option value='Proposal Sent'>Proposal Sent</option>
-            <option value='Closed'>Closed</option>
-          </select>
-          <label className='form-label'>Tags</label>
-          <div className='input-group mb-2'>
-            <input
-              className='form-control'
-              placeholder='Type tag and click Add'
-              name='tags'
-              onChange={handleChange}
-            />
-            <button
-              type='button'
-              className='btn btn-outline-primary'
-              onClick={addTag}>
-              Add
-            </button>
+      <div className='mb-3'>
+        <h4 className='fw-bold mb-4 text-center text-md-start'>Add Lead</h4>
+        <p className='text-muted small mb-0'>
+          Create and assign a new lead to a sales agent
+        </p>
+      </div>
+      <div className='row g-3'>
+        <div className='col-12'>
+          <div className='card shadow-sm full-width-card'>
+            <div className='card-body'>
+              <form onSubmit={submitHandler}>
+                <label className='form-label'>Lead Name</label>
+                <div className='mb-3'>
+                  <input
+                    className='form-control'
+                    placeholder='enter lead name'
+                    value={form.name}
+                    onChange={handleChange}
+                    name='name'
+                    required
+                  />
+                </div>
+                <div className='row g-3'>
+                  <div className='col-md-4 mb-3'>
+                    <label className='form-label'>Source</label>
+                    <select
+                      onChange={handleChange}
+                      className='form-select'
+                      name='source'
+                      value={form.source}>
+                      <option value='Website'>Website</option>
+                      <option value='Referral'>Referral</option>
+                      <option value='Cold Call'>Cold Call</option>
+                      <option value='Advertisement'>Advertisement</option>
+                      <option value='Email'>Email</option>
+                      <option value='Other'>Other</option>
+                    </select>
+                  </div>{" "}
+                  <div className='col-md-4 mb-4'>
+                    <label className='form-label'>Sales Agent</label>
+                    <select
+                      name='salesAgent'
+                      onChange={handleChange}
+                      className='form-select'>
+                      <option value=''>--Select Agent ---</option>
+                      {agents.map(({ _id, name }) => (
+                        <option key={_id} value={_id}>
+                          {name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className='col-md-4 mb-b'>
+                    <label className='form-label'>Priority</label>
+                    <select
+                      name='priority'
+                      onChange={handleChange}
+                      value={form.priority}
+                      className='form-select'>
+                      <option value=''>--Select Priority--</option>
+                      <option value='High'>High</option>
+                      <option value='Medium'>Medium</option>
+                      <option value='Low'>Low</option>
+                    </select>
+                  </div>
+                </div>
+
+                <label className='form-label'>Time to Close (days)</label>
+                <input
+                  type='number'
+                  min='1'
+                  name='timeToClose'
+                  className='form-control'
+                  value={form.timeToClose}
+                  onChange={handleChange}
+                />
+                <label>Lead Status</label>
+                <select
+                  name='status'
+                  value={form.status}
+                  onChange={handleChange}
+                  className='form-select'>
+                  <option value='New'>New</option>
+                  <option value='Contacted'>Contacted</option>
+                  <option value='Qualified'>Qualified</option>
+                  <option value='Proposal Sent'>Proposal Sent</option>
+                  <option value='Closed'>Closed</option>
+                </select>
+                <label className='form-label'>Tags</label>
+                <div className='input-group mb-2'>
+                  <input
+                    className='form-control'
+                    placeholder='Type tag and click Add'
+                    name='tags'
+                    onChange={handleChange}
+                  />
+                  <button
+                    type='button'
+                    className='btn btn-outline-primary'
+                    onClick={addTag}>
+                    Add
+                  </button>
+                </div>
+                <button className='btn btn-outline-secondary'>Add Leads</button>
+              </form>
+            </div>
           </div>
-          <button className='btn btn-outline-secondary'>Add Leads</button>
-        </form>
+        </div>
       </div>
     </div>
   );
